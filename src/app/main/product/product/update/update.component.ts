@@ -7,7 +7,6 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 
 // ==========================================================>> Custom Library
 import { SnackbarService } from 'app/shared/services/snackbar.service';
-import { ProductTypeService } from '../../type/product-type.service';
 import { ProductsService } from '../product.service';
 import { environment as env } from 'environments/environment';
 import { LoadingService } from 'helpers/services/loading';
@@ -19,7 +18,7 @@ import { LoadingService } from 'helpers/services/loading';
 })
 export class UpdateComponent implements OnInit  {
 
-  public fileUrl: string = env.fileUrl;
+  public FILE_PUBLIC_BASE_URL: string = env.FILE_PUBLIC_BASE_URL;
   @ViewChild('updateNgForm') updateNgForm: NgForm;
   UpdateProject = new EventEmitter();
   public saving: boolean = false;
@@ -34,21 +33,16 @@ export class UpdateComponent implements OnInit  {
     private dialogRef: MatDialogRef<UpdateComponent>,
     private _formBuilder: UntypedFormBuilder,
     private _productsService: ProductsService,
-    private _productTypeService: ProductTypeService,
     private snackBar: SnackbarService
   ) {
     dialogRef.disableClose = true;
-    this._productTypeService.read().subscribe((res: any) => {
-      this.products_type = res;
-    }, (err: any) => {
-      console.log(err);
-    });
+
   }
 
   ngOnInit(): void {
     console.log(this.getRow);
 
-    this.src = this.fileUrl+this.getRow?.image;
+    this.src = this.FILE_PUBLIC_BASE_URL+this.getRow?.image;
     this.formBuilder();
   }
 
