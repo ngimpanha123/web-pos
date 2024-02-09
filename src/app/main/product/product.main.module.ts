@@ -26,4 +26,4 @@ const productRoutes: Routes = [
         ProductsModule
     ]
 })
-export class ProductModule{}
+export class ProductMainModule{}
