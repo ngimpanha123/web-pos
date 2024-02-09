@@ -38,7 +38,6 @@ export class UserComponent implements OnInit {
                 this._router.navigateByUrl('/auth/login');
             }
         }
-        console.log(this.user)
     }
 
 
