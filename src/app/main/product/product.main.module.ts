@@ -3,15 +3,20 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
 // ==========================================================>> Custom Library
-import { ProductsModule } from 'app/main/product/product/product.module';
+import { ProductModule } from 'app/main/product/product/product.module';
+import { ProductTypeModule } from 'app/main/product/type/product-type.module';
 
-const productRoutes: Routes = [
+const routes: Routes = [
     {
         path: '',
         children: [
             {
                 path: 'all',
-                loadChildren: () => import('app/main/product/product/product.module').then(m => m.ProductsModule)
+                loadChildren: () => import('app/main/product/product/product.module').then(m => m.ProductModule)
+            },
+            {
+                path: 'types',
+                loadChildren: () => import('app/main/product/type/product-type.module').then(m => m.ProductTypeModule)
             }
         ]
     },
@@ -19,11 +24,14 @@ const productRoutes: Routes = [
 
 @NgModule({
     imports: [
-        RouterModule.forChild(productRoutes),
-        ProductsModule
+
+        RouterModule.forChild(routes),
+        ProductModule,
+        ProductTypeModule
+
     ],
     exports: [
-        ProductsModule
+
     ]
 })
 export class ProductMainModule{}

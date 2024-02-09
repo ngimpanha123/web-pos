@@ -6,10 +6,11 @@ import { RouterModule, Routes } from '@angular/router';
 import { SharedModule } from 'app/shared/shared.module';
 import { ScrollbarModule } from 'helpers/directives/scrollbar';
 import { ListingComponent } from './listing/listing.component';
-import { CreateComponent } from './create/create.component';
-import { UpdateComponent } from './update/update.component';
+import { ViewDialogComponent } from './view-dialog/view-dialog.component';
+import { CreateDialogComponent } from './create-dialog/create-dialog.component';
 
-const productsRoutes: Routes = [
+
+const routes: Routes = [
     {
         path: '',
         component: ListingComponent
@@ -18,14 +19,14 @@ const productsRoutes: Routes = [
 
 @NgModule({
     imports: [
-        SharedModule,
         ScrollbarModule,
-        RouterModule.forChild(productsRoutes),
+        RouterModule.forChild(routes),
+        SharedModule
     ],
     declarations: [
         ListingComponent,
-        CreateComponent,
-        UpdateComponent,
-    ]
+        ViewDialogComponent,
+        CreateDialogComponent
+    ],
 })
-export class ProductModule {}
+export class ProductTypeModule {}
