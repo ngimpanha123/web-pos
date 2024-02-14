@@ -42,11 +42,18 @@ export const defaultNavigation: NavigationItem[] = [
         icon     : 'mat_solid:shop_two',
         children : [
             {
-                id       : 'all-product',
-                title    : 'ផលិតផលទាំងអស់',
+                id       : 'all',
+                title    : 'ទាំងអស់',
                 type     : 'basic',
                 icon     : 'heroicons_solid:chevron-right',
                 link     : 'product/all'
+            },
+            {
+                id       : 'type',
+                title    : 'ប្រភេទ',
+                type     : 'basic',
+                icon     : 'heroicons_solid:chevron-right',
+                link     : 'product/types'
             }
         ],
     },

@@ -65,7 +65,7 @@ export const appRoutes: Route[] = [
             // =============================>> Product
             {
                 path: 'product',
-                loadChildren: () => import('app/main/product/product.module').then(m => m.ProductModule),
+                loadChildren: () => import('app/main/product/product.main.module').then(m => m.ProductMainModule),
                 canActivate: [AuthGuard],
             },
 
