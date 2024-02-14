@@ -8,12 +8,19 @@ import { ScrollbarModule } from 'helpers/directives/scrollbar';
 import { ListingComponent } from './listing/listing.component';
 import { CreateComponent } from './create/create.component';
 import { UpdateComponent } from './update/update.component';
+import { OverViewComponent } from './update/overview/update.component';
+import { OrderTransactionComponent } from './update/order_transaction/update.component';
 
 const productsRoutes: Routes = [
     {
         path: '',
         component: ListingComponent
+    },
+    {
+        path: ':id/update',
+        component: UpdateComponent
     }
+
 ];
 
 @NgModule({
@@ -26,6 +33,8 @@ const productsRoutes: Routes = [
         ListingComponent,
         CreateComponent,
         UpdateComponent,
+        OverViewComponent,
+        OrderTransactionComponent
     ]
 })
 export class ProductModule {}

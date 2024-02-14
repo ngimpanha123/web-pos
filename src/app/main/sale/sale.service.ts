@@ -35,7 +35,7 @@ export class SaleService {
     }
     // ==================== Delete One Product
     print(receipt_number: number = 0): any {
-        return this.http.get(this.url + '/admin/print/order-invoice/' + receipt_number, this.httpOptions);
+        return this.http.get(this.url + '/admin/sales/print/' + receipt_number, this.httpOptions);
     }
     // ==================== Delete One Product
     delete(id: number = 0): any {

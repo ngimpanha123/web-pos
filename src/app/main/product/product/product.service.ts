@@ -4,6 +4,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 // ==========================================================>> Custom Library
 import { environment as env } from 'environments/environment';
+import { Observable } from 'rxjs';
 
 @Injectable({
     providedIn: 'root',
@@ -29,6 +30,15 @@ export class ProductsService {
     create(data: object = {}): any {
         return this.http.post(this.url + '/admin/products', data, this.httpOptions);
     }
+
+    // =================== Update One Product
+    view(id: number=null): Observable<any> {
+        console.log(id);
+
+        const httpOptions = {};
+        return this.http.get(this.url + '/admin/products/' + id, httpOptions);
+    }
+
     // ==================== Read All Products
     read(params = {}): any {
         const httpOptions = {

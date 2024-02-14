@@ -135,7 +135,7 @@
                                 <mat-icon class="icon-size-6" svgIcon="mat_outline:more_vert"></mat-icon>
                             </button>
                             <mat-menu #menu="matMenu">
-                                <button mat-menu-item (click)="update(element)">
+                                <button mat-menu-item [routerLink]="[element.id, 'update']" [state]="element">
                                     <mat-icon class="icon-size-5 text-blue-500" svgIcon="mat_outline:edit"></mat-icon>
                                     <span class="text-lg text-blue-500">កែប្រែ</span>
                                 </button>

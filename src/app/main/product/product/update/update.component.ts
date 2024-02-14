@@ -1,112 +1,65 @@
-// ==========================================================>> Core Library
-import { Component, EventEmitter, Inject, OnInit, ViewChild } from '@angular/core';
-import { NgForm, UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
+    // ==========================================================>> Core Library
+    import { Component, EventEmitter, Inject, OnInit, ViewChild } from '@angular/core';
+    import { NgForm, UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
+    import { ActivatedRoute } from '@angular/router';
 
-// ==========================================================>> Third Party Library
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+    // ==========================================================>> Third Party Library
+    import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+    import { MatTabsModule } from '@angular/material/tabs';
 
-// ==========================================================>> Custom Library
-import { SnackbarService } from 'app/shared/services/snackbar.service';
-import { ProductsService } from '../product.service';
-import { environment as env } from 'environments/environment';
-import { LoadingService } from 'helpers/services/loading';
+    // ==========================================================>> Custom Library
+    import { SnackbarService } from 'app/shared/services/snackbar.service';
+    import { ProductsService } from '../product.service';
+    import { environment as env } from 'environments/environment';
+    import { LoadingService } from 'helpers/services/loading';
+    import { OverViewComponent } from './overview/update.component';
+    @Component({
+            selector: 'app-update',
+            templateUrl: './update.component.html',
+            styleUrls: ['./update.component.scss']
+        })
+        export class UpdateComponent implements OnInit {
+            public FILE_PUBLIC_BASE_URL: string = env.FILE_PUBLIC_BASE_URL;
+            @ViewChild('updateNgForm') updateNgForm: NgForm;
+            yourDataObject: any;
+            public saving: boolean = false;
+            public update: UntypedFormGroup;
+            public isLoading: boolean = false;
+            public data: any = {};
+            public mode: any;
+            public src: string = 'assets/icons/icon-img.png';
+            public products_type: any[][];
+            public id: number;
+            public isSearching = false;
 
-@Component({
-  selector: 'app-update',
-  templateUrl: './update.component.html',
-  styleUrls: ['./update.component.scss']
-})
-export class UpdateComponent implements OnInit  {
+            constructor(
+            private _formBuilder: UntypedFormBuilder,
+            private _productsService: ProductsService,
+            private snackBar: SnackbarService,
+            private _route: ActivatedRoute,
+            ) {}
+            ngOnInit(): void {
+                this._route.paramMap.subscribe((params) => {
+                    this.id = +params.get('id');
+                });
 
-  public FILE_PUBLIC_BASE_URL: string = env.FILE_PUBLIC_BASE_URL;
-  @ViewChild('updateNgForm') updateNgForm: NgForm;
-  UpdateProject = new EventEmitter();
-  public saving: boolean = false;
-  public update: UntypedFormGroup;
-  public isLoading: boolean = false;
-  public data: any;
-  public mode: any;
-  public src: string = 'assets/icons/icon-img.png';
-  public products_type: any[][];
-  constructor(
-    @Inject(MAT_DIALOG_DATA) public getRow: any,
-    private dialogRef: MatDialogRef<UpdateComponent>,
-    private _formBuilder: UntypedFormBuilder,
-    private _productsService: ProductsService,
-    private snackBar: SnackbarService
-  ) {
-    dialogRef.disableClose = true;
+                this.isSearching = true;
 
-  }
+                this._productsService.view(this.id).subscribe(
+                    (res: any) => {
+                        this.data = res;
+                        this.isSearching = false;
+                        console.log('Data in UpdateComponent:', this.data);
 
-  ngOnInit(): void {
-    console.log(this.getRow);
-
-    this.src = this.FILE_PUBLIC_BASE_URL+this.getRow?.image;
-    this.formBuilder();
-  }
-
-  srcChange($event: any) {
-    this.update.get('image').setValue($event);
-  }
-
-  formBuilder(): void {
-    this.update = this._formBuilder.group({
-      code: [this.getRow?.code, Validators.required],
-      type_id: [this.getRow?.type_id, Validators.required],
-      name: [this.getRow?.name, Validators.required],
-      unit_price: [this.getRow?.unit_price, Validators.required],
-      image: [],
-    });
-  }
-
-  submit(): void {
-    // Return if the form is invalid
-    if (this.update.invalid) {
-      return;
-    }
-
-    // Disable the form
-    this.update.disable();
-
-    // Saving
-    this.saving = true;
-
-    // call to api
-    this._productsService.update(this.getRow.id,this.update.value).subscribe(
-      (res: any) => {
-        this.dialogRef.close();
-        this.UpdateProject.emit(res.product);
-        //use snack bar to opron message
-        this.snackBar.openSnackBar(res.message, '');
-      },
-      (err: any) => {
-
-        // Re-enable the form
-        this.update.enable();
-
-        // saved
-        this.saving = false;
-
-        let errors: any[] = [];
-        errors = err.error.errors;
-        let messages: any[] = [];
-        let text: string = '';
-        if (errors.length > 0) {
-          errors.forEach((v: any) => {
-            messages.push(v.message)
-          });
-          if (messages.length > 1) {
-            text = messages.join('-');
-          } else {
-            text = messages[0];
-          }
-        } else {
-          text = err.error.message;
+                        // Uncomment the line below for testing the data flow
+                        // this.overviewComponent.data = this.data;
+                    },
+                    (error) => {
+                        console.error('Error loading data:', error);
+                        this.isSearching = false;
+                    }
+                );
+            }
         }
-        this.snackBar.openSnackBar(text, 'error');
-      }
-    );
-  }
 
-}
+
