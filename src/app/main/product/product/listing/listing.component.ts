@@ -1,5 +1,6 @@
 // ==========================================================>> Core Library
 import { Component, OnInit } from '@angular/core';
+import { Router, ActivatedRoute } from '@angular/router';
 
 // ==========================================================>> Third Party Library
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
@@ -37,7 +38,10 @@ export class ListingComponent implements OnInit {
     private _productService: ProductsService,
     private _snackBarService: SnackbarService,
     private _loadingService: LoadingService,
-    private _dialog: MatDialog
+    private _dialog: MatDialog,
+    private router: Router,
+    private route: ActivatedRoute
+
   ) { }
 
   ngOnInit(): void {
@@ -109,25 +113,6 @@ export class ListingComponent implements OnInit {
       this.dataSource = new MatTableDataSource(this.data);
     });
   }
-  //=======================================>> Update Product
-  update(row: any): void {
-    const dialogConfig = new MatDialogConfig();
-    dialogConfig.data = row;
-    dialogConfig.width = "850px";
-    const dialogRef = this._dialog.open(UpdateComponent, dialogConfig);
-    dialogRef.componentInstance.UpdateProject.subscribe((response: any) => {
-      let copy: any[] = [];
-      this.data.forEach((v: any) => {
-        if (v.id == response.id) {
-          copy.push(response);
-        } else {
-          copy.push(v);
-        }
-      });
-      this.data = copy;
-      this.dataSource = new MatTableDataSource(this.data);
-    });
-  }
   //=======================================>> Delete Product
   delete(id: number = 0): void {
     const dialogConfig = new MatDialogConfig();
@@ -154,4 +139,9 @@ export class ListingComponent implements OnInit {
       }
     });
   }
+  //=======================================>> Update Product
+  update(id: number): void {
+    // Navigate to the update view with the ID
+    this.router.navigate([id, 'update'], { relativeTo: this.route.parent });
+}
 }
