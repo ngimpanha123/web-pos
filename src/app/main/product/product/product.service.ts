@@ -55,5 +55,14 @@ export class ProductsService {
     delete(id: number = 0): any {
         return this.http.delete(this.url + '/admin/products/' + id, this.httpOptions);
     }
-    //==================================================================
+    //==================================================================transactions
+    getTransactions(id: number = null, params = {}): Observable<any> {
+        const httpOptions = {
+          headers: new HttpHeaders().set('Content-Type', 'application/json'),
+          params: params // Include additional parameters in the params object
+        };
+
+        return this.http.get(this.url + '/admin/products/transactions/' + id, httpOptions);
+      }
+
 }

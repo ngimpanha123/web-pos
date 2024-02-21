@@ -1,9 +1,12 @@
 // ==========================================================>> Core Library
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { MatTableModule } from '@angular/material/table';
+
 
 // ==========================================================>> Custom Library
-import { ProductsModule } from 'app/main/product/product/product.module';
+import { ProductModule} from 'app/main/product/product/product.module';
+
 
 const productRoutes: Routes = [
     {
@@ -21,7 +24,8 @@ const productRoutes: Routes = [
 @NgModule({
     imports: [
         RouterModule.forChild(productRoutes),
-        ProductsModule
+        MatTableModule,
+        ProductsModule,
     ],
     exports: [
         ProductsModule

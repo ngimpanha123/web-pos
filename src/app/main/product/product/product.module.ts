@@ -10,6 +10,7 @@ import { CreateComponent } from './create/create.component';
 import { UpdateComponent } from './update/update.component';
 import { OverViewComponent } from './update/overview/update.component';
 import { OrderTransactionComponent } from './update/order_transaction/update.component';
+import { MatTableModule } from '@angular/material/table';
 
 const productsRoutes: Routes = [
     {
@@ -28,6 +29,8 @@ const productsRoutes: Routes = [
         SharedModule,
         ScrollbarModule,
         RouterModule.forChild(productsRoutes),
+        MatTableModule,
+
     ],
     declarations: [
         ListingComponent,

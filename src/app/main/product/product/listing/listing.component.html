@@ -78,7 +78,7 @@
         </ng-container>
         <div class="container-listing-products-content border rounded-lg hidden flex-col"
             [ngClass]="{'flex-custom': data?.length > 0  && !isLoading }">
-            <div class="container-listing-products-data bg-blue-200" scrollbar>
+            <div class="container-listing-products-data bg-blue-200" scrollbar="true">
 
                 <table mat-table [dataSource]="dataSource">
 
