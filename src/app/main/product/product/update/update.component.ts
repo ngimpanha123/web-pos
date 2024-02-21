@@ -31,6 +31,7 @@
             public products_type: any[][];
             public id: number;
             public isSearching = false;
+            public productId: number;
 
             constructor(
             private _formBuilder: UntypedFormBuilder,
@@ -41,6 +42,7 @@
             ngOnInit(): void {
                 this._route.paramMap.subscribe((params) => {
                     this.id = +params.get('id');
+                    this.productId = this.id;
                 });
 
                 this.isSearching = true;

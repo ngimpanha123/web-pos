@@ -167,16 +167,20 @@ export class ListingComponent implements OnInit {
   }
 
   // ========== download receipt payment ============= \\
-  print( row: any): void {
+  print(row: any): void {
     this.downloading = true;
-    this._saleService.print(row).subscribe((res: any) => {
-      this.downloading = false;
-      const blob = this._saleService.b64toBlob(res.file_base64, 'application/pdf', '');
-      FileSaver.saveAs(blob, 'Invoice-' + row + '.pdf');
-    }, (err: any) => {
-      this.downloading = false;
-      console.log(err);
-    });
-  }
+    this._saleService.print(row).subscribe(
+        (res: any) => {
+            this.downloading = false;
+            const blob = this._saleService.b64toBlob(res.file_base64, 'application/pdf', '');
+            FileSaver.saveAs(blob, 'Invoice-' + row + '.pdf');
+        },
+        (err: any) => {
+            this.downloading = false;
+            console.log(err);
+        }
+    );
+}
+
 
 }

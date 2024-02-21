@@ -1,6 +1,8 @@
 // ==========================================================>> Core Library
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { MatTableModule } from '@angular/material/table';
+import { ScrollbarModule } from 'helpers/directives/scrollbar';
 
 // ==========================================================>> Custom Library
 import { ProductModule } from 'app/main/product/product/product.module';
@@ -24,11 +26,11 @@ const routes: Routes = [
 
 @NgModule({
     imports: [
-
         RouterModule.forChild(routes),
         ProductModule,
-        ProductTypeModule
-
+        ProductTypeModule,
+        MatTableModule,
+        ScrollbarModule,
     ],
     exports: [
 
