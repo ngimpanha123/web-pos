@@ -13,8 +13,8 @@ import { ProductTypeService } from '../../type/product-type.service';
 import { LoadingService } from 'helpers/services/loading';
 import { CreateComponent } from '../create/create.component';
 import { ProductsService } from '../product.service';
-import { ViewComponent } from '../view/view.component';
 import { environment as env } from 'environments/environment';
+import { UpdateDialogComponent } from '../update/update.component';
 
 @Component({
     selector: 'app-listing',
@@ -81,7 +81,6 @@ export class ListingComponent implements OnInit {
                 this.isLoading = false;
                 this._loadingService.hide();
                 this.data = res.data;
-                console.log(this.data);
                 this.dataSource = new MatTableDataSource(this.data);
                 this.total = res.total;
                 this.page = res.current_page;
@@ -165,11 +164,21 @@ export class ListingComponent implements OnInit {
         this.router.navigate([id, 'view'], { relativeTo: this.route.parent });
     }
 
+    update( i: number = 0, data: any = null ): void {
+      const dialogConfig = new MatDialogConfig();
+      dialogConfig.data = data;
+      dialogConfig.width = '500px';
+      const dialogRef = this._dialog.open(UpdateDialogComponent, dialogConfig);
+      dialogRef.afterClosed().subscribe( (res: any) => {
+        this.data[i] = res;
+        this.dataSource = new MatTableDataSource(this.data);
+      });
+    }
+
     getProductType(): void {
       this._productsTypeService.get().subscribe(
         (res: any) => {
         this.products_type = res;
-        console.log(res);
       },
     );
     }

@@ -2,6 +2,10 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
+// ==========================================================>> Third Party Library
+
+import { MatTableModule } from '@angular/material/table';
+
 // ==========================================================>> Custom Library
 import { SharedModule } from 'app/shared/shared.module';
 import { ScrollbarModule } from 'helpers/directives/scrollbar';
@@ -10,7 +14,8 @@ import { CreateComponent } from './create/create.component';
 import { ViewComponent } from './view/view.component';
 import { OverViewComponent } from './view/overview/overview.component';
 import { OrderTransactionComponent } from './view/order_transaction/order_transaction.component';
-import { MatTableModule } from '@angular/material/table';
+import { UpdateDialogComponent } from './update/update.component';
+
 
 const productsRoutes: Routes = [
     {
@@ -37,7 +42,8 @@ const productsRoutes: Routes = [
         CreateComponent,
         ViewComponent,
         OverViewComponent,
-        OrderTransactionComponent
+        OrderTransactionComponent,
+        UpdateDialogComponent
     ]
 })
 export class ProductModule {}
