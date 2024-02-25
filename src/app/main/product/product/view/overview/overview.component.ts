@@ -14,10 +14,11 @@
     import { ProductsService } from '../../product.service';
     import { environment as env } from 'environments/environment';
     import { LoadingService } from 'helpers/services/loading';
+    import { ProductTypeService } from 'app/main/product/type/product-type.service';
     @Component({
         selector: 'app-overview',
-        templateUrl: './update.component.html',
-        styleUrls: ['./update.component.scss'],
+        templateUrl: './overview.component.html',
+        styleUrls: ['./overview.component.scss'],
     })
     export class OverViewComponent implements OnInit {
         @Input() public data: any;
@@ -26,20 +27,22 @@
         public id: number;
         public FILE_PUBLIC_BASE_URL: string = env.FILE_PUBLIC_BASE_URL;
         public src: string = 'assets/icons/icon-img.png';
-        public products_type: any[][];
+        public products_type: any = [];
         public saving: boolean = false;
 
 
         constructor(
             private _snackBar: SnackbarService,
-            private productService: ProductsService,
+            private _productService: ProductsService,
             private readonly _router: Router,
-            private _route  : ActivatedRoute,
-            private formBuilder: UntypedFormBuilder
+            private _route: ActivatedRoute,
+            private _formBuilder: UntypedFormBuilder,
+            private _productsTypeService: ProductTypeService,
         ) { }
 
         ngOnInit(): void {
             this.buildForm();
+            this.getProductType();
         }
 
         ngOnChanges(changes: SimpleChanges): void {
@@ -53,7 +56,7 @@
             console.log('Data in buildForm:', this.data);
 
             if (this.data) {
-                this.form = this.formBuilder.group({
+                this.form = this._formBuilder.group({
                     code: [this.data.code],
                     type_id: [this.data.type_id],
                     name: [this.data.name],
@@ -71,7 +74,7 @@
             if (this.form) {
                 this.saving = true;
 
-                this.productService.update(this.data.id, this.form.value).subscribe(
+                this._productService.update(this.data.id, this.form.value).subscribe(
                     (res: any) => {
                         this.saving = false;
                         this._snackBar.openSnackBar(res.message, '');
@@ -103,4 +106,12 @@
             this._router.navigate(['../../'], { relativeTo: this._route });
         }
 
+        getProductType(): void {
+            this._productsTypeService.get().subscribe(
+              (res: any) => {
+              this.products_type = res;
+              console.log(res);
+            },
+          );
+        }
     }

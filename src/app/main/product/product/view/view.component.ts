@@ -12,13 +12,13 @@
     import { ProductsService } from '../product.service';
     import { environment as env } from 'environments/environment';
     import { LoadingService } from 'helpers/services/loading';
-    import { OverViewComponent } from './overview/update.component';
+    import { OverViewComponent } from './overview/overview.component';
     @Component({
-            selector: 'app-update',
-            templateUrl: './update.component.html',
-            styleUrls: ['./update.component.scss']
+            selector: 'app-view',
+            templateUrl: './view.component.html',
+            styleUrls: ['./view.component.scss']
         })
-        export class UpdateComponent implements OnInit {
+        export class ViewComponent implements OnInit {
             public FILE_PUBLIC_BASE_URL: string = env.FILE_PUBLIC_BASE_URL;
             @ViewChild('updateNgForm') updateNgForm: NgForm;
             yourDataObject: any;

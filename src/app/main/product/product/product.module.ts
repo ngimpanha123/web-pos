@@ -7,9 +7,9 @@ import { SharedModule } from 'app/shared/shared.module';
 import { ScrollbarModule } from 'helpers/directives/scrollbar';
 import { ListingComponent } from './listing/listing.component';
 import { CreateComponent } from './create/create.component';
-import { UpdateComponent } from './update/update.component';
-import { OverViewComponent } from './update/overview/update.component';
-import { OrderTransactionComponent } from './update/order_transaction/update.component';
+import { ViewComponent } from './view/view.component';
+import { OverViewComponent } from './view/overview/overview.component';
+import { OrderTransactionComponent } from './view/order_transaction/order_transaction.component';
 import { MatTableModule } from '@angular/material/table';
 
 const productsRoutes: Routes = [
@@ -18,8 +18,8 @@ const productsRoutes: Routes = [
         component: ListingComponent
     },
     {
-        path: ':id/update',
-        component: UpdateComponent
+        path: ':id/view',
+        component: ViewComponent
     }
 
 ];
@@ -35,7 +35,7 @@ const productsRoutes: Routes = [
     declarations: [
         ListingComponent,
         CreateComponent,
-        UpdateComponent,
+        ViewComponent,
         OverViewComponent,
         OrderTransactionComponent
     ]

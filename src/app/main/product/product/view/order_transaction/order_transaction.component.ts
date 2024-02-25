@@ -13,8 +13,8 @@ import { PageEvent } from '@angular/material/paginator';
 
   @Component({
     selector: 'app-transaction',
-    templateUrl: './update.component.html',
-    styleUrls: ['./update.component.scss'],
+    templateUrl: './order_transaction.component.html',
+    styleUrls: ['./order_transaction.component.scss'],
   })
   export class OrderTransactionComponent implements OnInit {
   @Input() public productId: number;
