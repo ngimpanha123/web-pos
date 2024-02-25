@@ -8,7 +8,6 @@ import { MatTableDataSource } from '@angular/material/table';
 // ==========================================================>> Custom Library
 import { ConfirmDialogComponent } from 'app/shared/confirm-dialog/confirm-dialog.component';
 import { SnackbarService } from 'app/shared/services/snackbar.service';
-import { LoadingService } from 'helpers/services/loading';
 import { UserService } from '../user.service';
 import { environment as env } from 'environments/environment';
 import { CreateComponent } from '../create/create.component';
@@ -24,27 +23,31 @@ import { HttpErrorResponse } from '@angular/common/http';
 })
 export class ListingComponent implements OnInit {
 
-  public FILE_PUBLIC_BASE_URL: string = env.FILE_PUBLIC_BASE_URL;
-  public displayedColumns: string[] = ['no', 'name', 'phone', 'status', 'last_update', 'action'];
-  public dataSource: MatTableDataSource<User>;
-  public isSearching: boolean = true;
-  public data: User[];
-  public total: number = 10;
-  public limit: number = 10;
-  public page: number = 1;
-  public key: string = '';
+    public isSearching: boolean = true;
+    public FILE_PUBLIC_BASE_URL: string = env.FILE_PUBLIC_BASE_URL;
 
-  public entities: any[] = [];
-  /**
-   * Constructor
-   */
-  constructor(
-    private _userService: UserService,
-    private _snackBar: SnackbarService,
-    private _dialog: MatDialog,
-    private _loadingService: LoadingService
-  ) {
-  }
+    public displayedColumns: string[] = ['no', 'name', 'phone', 'status', 'last_update', 'action'];
+    public dataSource: MatTableDataSource<User>;
+    public data: User[];
+
+    // Pagination
+    public total: number    = 10;
+    public limit: number    = 10;
+    public page: number     = 1;
+
+    // Filter
+    public key: string = '';
+
+    public entities: any[] = [];
+    /**
+     * Constructor
+     */
+    constructor(
+        private _userService: UserService,
+        private _snackBar: SnackbarService,
+        private _dialog: MatDialog
+    ) {
+    }
 
   // -----------------------------------------------------------------------------------------------------
   // @ Lifecycle hooks
@@ -68,26 +71,41 @@ export class ListingComponent implements OnInit {
     if (this.key != '') {
       param.key = this.key;
     }
+
     if (this.page != 0) {
       param.page = this.page;
     }
 
+    // Display Spinner UI
     this.isSearching = true;
-    this._loadingService.show();
+
+    // ===>> Call API
     this._userService.listing(param).subscribe({
-      next: (response: ListUsers) => {
+      next: (res: ListUsers) => {
+
+        // Hide Spinner
         this.isSearching = false;
-        this._loadingService.hide();
-        this.data = response.data;
+
+        // Data Mapping
+        this.data = res.data;
+
+        // Data Source Mapping
         this.dataSource = new MatTableDataSource(this.data);
-        this.total = response.total;
-        this.page = response.current_page;
-        this.limit = response.per_page;
+
+        // Pagination value update
+        this.total  = res.total;
+        this.page   = res.current_page;
+        this.limit  = res.per_page;
+
       },
       error: (err: HttpErrorResponse) => {
+
+        // Hide Spinner
         this.isSearching = false;
-        this._loadingService.hide();
+
+        // Display Snackbar
         this._snackBar.openSnackBar('Something went wrong.', 'error');
+
       }
     });
   }
