@@ -8,6 +8,7 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 // ==========================================================>> Custom Library
 import { SnackbarService } from 'app/shared/services/snackbar.service';
 import { ProductsService } from '../product.service';
+import { ProductTypeService } from '../../type/product-type.service';
 
 @Component({
   selector: 'app-create',
@@ -24,12 +25,13 @@ export class CreateComponent implements OnInit {
   public data: any;
   public mode: any;
   public src: string = 'assets/icons/icon-img.png';
-  public products_type: any[][];
+  public products_type: any = [];
   constructor(
     @Inject(MAT_DIALOG_DATA) public dataDialog: any,
     private dialogRef: MatDialogRef<CreateComponent>,
     private _formBuilder: UntypedFormBuilder,
     private _productsService: ProductsService,
+    private _productsTypeService: ProductTypeService,
     private snackBar: SnackbarService
   ) {
 
@@ -39,6 +41,7 @@ export class CreateComponent implements OnInit {
 
   ngOnInit(): void {
     this.formBuilder();
+    this.getProductType();
   }
 
   srcChange($event: any) {
@@ -105,4 +108,12 @@ export class CreateComponent implements OnInit {
     );
   }
 
+  getProductType(): void {
+    this._productsTypeService.get().subscribe(
+      (res: any) => {
+      this.products_type = res;
+      console.log(res);
+    },
+  );
+  }
 }

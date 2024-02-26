@@ -65,4 +65,13 @@ export class ProductsService {
         return this.http.get(this.url + '/admin/products/transactions/' + id, httpOptions);
       }
 
+    //================================================================= Get products type
+    getProductType(): Observable<any> {
+        const httpOptions = {
+          headers: new HttpHeaders().set('Content-Type', 'application/json'),
+        };
+
+        return this.http.get(this.url + '/admin/products/types' , httpOptions);
+      }
+
 }
