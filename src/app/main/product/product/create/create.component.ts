@@ -1,6 +1,6 @@
 // ==========================================================>> Core Library
-import { Component, EventEmitter, Inject, OnInit, ViewChild } from '@angular/core';
-import { NgForm, UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
+import { Component, OnInit, Inject} from '@angular/core';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 
 // ==========================================================>> Third Party Library
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
@@ -9,6 +9,7 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { SnackbarService } from 'app/shared/services/snackbar.service';
 import { ProductsService } from '../product.service';
 import { ProductTypeService } from '../../type/product-type.service';
+import { environment as env } from 'environments/environment';
 
 @Component({
   selector: 'app-create',
@@ -17,40 +18,40 @@ import { ProductTypeService } from '../../type/product-type.service';
 })
 export class CreateComponent implements OnInit {
 
-  @ViewChild('createNgForm') createNgForm: NgForm;
-  CreateProject = new EventEmitter();
   public saving: boolean = false;
-  public create: UntypedFormGroup;
+  public form: UntypedFormGroup;
   public isLoading: boolean = false;
   public data: any;
-  public mode: any;
-  public src: string = 'assets/icons/icon-img.png';
-  public products_type: any = [];
+  public srcImageFileUrl: string = 'assets/icons/icon-img.png';
+  public types: any = [];//Product Type
   constructor(
-    @Inject(MAT_DIALOG_DATA) public dataDialog: any,
-    private dialogRef: MatDialogRef<CreateComponent>,
+    @Inject(MAT_DIALOG_DATA) public dialogData: any,
+    private _dialogRef: MatDialogRef<CreateComponent>,
     private _formBuilder: UntypedFormBuilder,
     private _productsService: ProductsService,
     private _productsTypeService: ProductTypeService,
-    private snackBar: SnackbarService
+    private _snackBar: SnackbarService
   ) {
 
-    dialogRef.disableClose = true;
+    // Make sure that user can't click anyarea to close the dialog
+    _dialogRef.disableClose = true;
 
   }
 
   ngOnInit(): void {
-    this.formBuilder();
+
+    // Call API for getting product type tobe use in dropdown selection
     this.getProductType();
-  }
 
-  srcChange($event: any) {
+    // Build form
+    this.formBuilder();
 
-    this.create.get('image').setValue($event);
+    // Mapping File url of image
+    this.srcImageFileUrl = env.FILE_PUBLIC_BASE_URL + this.dialogData.image;
   }
 
   formBuilder(): void {
-    this.create = this._formBuilder.group({
+    this.form = this._formBuilder.group({
       code: ['', Validators.required],
       type_id: ['', Validators.required],
       name: ['', Validators.required],
@@ -59,30 +60,40 @@ export class CreateComponent implements OnInit {
     });
   }
 
+  // Getting base64 string after file is selected
+  srcChange($event: any): void {
+
+    // Assign base64 string ($event) to fill image of the form 
+    this.form.get('image').setValue($event);
+  }
+
+  // Sent Data to API
   submit(): void {
     // Return if the form is invalid
-    if (this.create.invalid) {
+    if (this.form.invalid) {
       return;
     }
 
     // Disable the form
-    this.create.disable();
+    this.form.disable();
 
     // Saving
     this.saving = true;
 
     // call to api
-    this._productsService.create(this.create.value).subscribe(
+    this._productsService.create(this.form.value).subscribe(
       (res: any) => {
-        this.dialogRef.close();
-        this.CreateProject.emit(res.data);
-        //use snack bar to opron message
-        this.snackBar.openSnackBar(res.message, '');
+        const product: any = this.form.value ;
+
+        this._snackBar.openSnackBar(res.message, '');
+
+        // Close dialog and return data to listing component
+        this._dialogRef.close(res.data);
       },
       (err: any) => {
 
         // Re-enable the form
-        this.create.enable();
+        this.form.enable();
 
         // saved
         this.saving = false;
@@ -103,7 +114,7 @@ export class CreateComponent implements OnInit {
         } else {
           text = err.error.message;
         }
-        this.snackBar.openSnackBar(text, 'error');
+        this._snackBar.openSnackBar(text, 'error');
       }
     );
   }
@@ -111,8 +122,7 @@ export class CreateComponent implements OnInit {
   getProductType(): void {
     this._productsTypeService.get().subscribe(
       (res: any) => {
-      this.products_type = res;
-      console.log(res);
+      this.types = res;
     },
   );
   }
