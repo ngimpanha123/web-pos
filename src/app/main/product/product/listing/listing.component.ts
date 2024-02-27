@@ -111,17 +111,24 @@ export class ListingComponent implements OnInit {
         const dialogConfig = new MatDialogConfig();
         dialogConfig.width = '850px';
         const dialogRef = this._dialog.open(CreateComponent, dialogConfig);
-        dialogRef.componentInstance.CreateProject.subscribe((response: any) => {
-            let copy: any[] = [];
-            copy.push(response);
-            this.data.forEach((row: any) => {
-                copy.push(row);
-            });
-            this.data = copy;
-            this.total += 1;
-            this.limit += 1;
+        // dialogRef.componentInstance.CreateProject.subscribe((response: any) => {
+        //     let copy: any[] = [];
+        //     copy.push(response);
+        //     this.data.forEach((row: any) => {
+        //         copy.push(row);
+        //     });
+        //     this.data = copy;
+        //     this.total += 1;
+        //     this.limit += 1;
+        //     this.dataSource = new MatTableDataSource(this.data);
+        // });
+        dialogRef.afterClosed().subscribe( (res: any) => {
+            this.data.unshift(res);
+            console.log(res);
             this.dataSource = new MatTableDataSource(this.data);
-        });
+          });
+
+
     }
     //=======================================>> Delete Product
     delete(id: number = 0): void {
