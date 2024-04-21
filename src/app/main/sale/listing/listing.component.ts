@@ -40,7 +40,9 @@ export class ListingComponent implements OnInit {
 
   public displayedColumns: string[] = ['no', 'invoice', 'cashier','price', 'date', 'action'];
   public dataSource: any;
-  public isLoading: boolean = true;
+
+  public isLoading: boolean = false;
+  public isDownloading: boolean = false;
 
   public data: any = [];
 
@@ -53,7 +55,7 @@ export class ListingComponent implements OnInit {
   public total: number = 10;
   public limit: number = 10;
 
-  public downloading: boolean = false;
+
 
   constructor(
     private _saleService: SaleService,
@@ -62,11 +64,14 @@ export class ListingComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.listing(this.limit, this.page);
+
+    // Get Data from API
+    this.getData(this.limit, this.page);
+
   }
 
   //===================================>> List
-  listing(_limit: number = 10, _page: number = 1): any {
+  getData(_limit: number = 10, _page: number = 1): any {
 
 
     // Parameter Preparation
@@ -92,9 +97,13 @@ export class ListingComponent implements OnInit {
       param.page = this.page;
     }
 
+    // Dispaly Spinner UI
     this.isLoading = true;
 
+    // Call API
     this._saleService.getData(param).subscribe((res: any) => {
+
+        // console.log(res);
 
         // Stop Loading
         this.isLoading        = false;
@@ -125,18 +134,25 @@ export class ListingComponent implements OnInit {
   //=======================================>> On Page Changed
   onPageChanged(event: any): any {
     if (event && event.pageSize) {
+
       this.limit = event.pageSize;
       this.page = event.pageIndex + 1;
-      this.listing(this.limit, this.page);
+      this.getData(this.limit, this.page);
+
     }
   }
 
   //=======================================>> View Sale
   view(row: any): void {
+
+    // console.log(row);
+
     const dialogConfig = new MatDialogConfig();
     dialogConfig.data = row;
     dialogConfig.width = '650px';
+
     const dialogRef = this._dialog.open(DetailsComponent, dialogConfig);
+
   }
 
   //=======================================>> Delete Sale
@@ -168,15 +184,15 @@ export class ListingComponent implements OnInit {
 
   // ========== download receipt payment ============= \\
   print(row: any): void {
-    this.downloading = true;
+    this.isDownloading = true;
     this._saleService.print(row).subscribe(
         (res: any) => {
-            this.downloading = false;
+            this.isDownloading = false;
             const blob = this._saleService.b64toBlob(res.file_base64, 'application/pdf', '');
             FileSaver.saveAs(blob, 'Invoice-' + row + '.pdf');
         },
         (err: any) => {
-            this.downloading = false;
+            this.isDownloading = false;
             console.log(err);
         }
     );
